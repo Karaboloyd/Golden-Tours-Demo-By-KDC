@@ -72,11 +72,10 @@ DESIGN TOKENS
   --ease-out:cubic-bezier(.16,1,.3,1);
   --font-head:'Sora',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
-  /* Safe area for iOS notch */
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 /* ============================================================
-RESET & BASE — with mobile overflow safety
+RESET & BASE
    ============================================================ */
 *,*::before,*::after{box-sizing:border-box;}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
@@ -1270,11 +1269,19 @@ FOOTER
 .kdc-credit a:hover{opacity:.8;}
 .kdc-tag{color:rgba(255,255,255,.42);font-style:italic;}
 /* ============================================================
-FLOATING ACTIONS
+FLOATING ACTIONS — now with hidden-on-footer state
    ============================================================ */
 .float-actions{
   position:fixed;right:22px;bottom:26px;z-index:800;
   display:flex;flex-direction:column;gap:12px;
+  transition:opacity .35s var(--ease), transform .35s var(--ease), visibility .35s var(--ease);
+}
+/* Hidden state — when the footer is in view */
+.float-actions.is-hidden-view{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(24px);
+  pointer-events:none;
 }
 .float-btn{
   position:relative;
@@ -1299,7 +1306,7 @@ FLOATING ACTIONS
 }
 .float-btn:hover .float-tip{opacity:1;transform:translateY(-50%) translateX(-4px);}
 /* ============================================================
-MOBILE STICKY CTA — smart hide on hero & footer
+MOBILE STICKY CTA — hidden on hero & footer
    ============================================================ */
 .mobile-cta{
   position:fixed;left:16px;right:16px;
@@ -1322,7 +1329,7 @@ MOBILE STICKY CTA — smart hide on hero & footer
   pointer-events:none;
 }
 /* ============================================================
-BACK TO TOP
+BACK TO TOP — now with hidden-on-footer state
    ============================================================ */
 .back-to-top{
   position:fixed;left:22px;bottom:26px;z-index:800;
@@ -1337,6 +1344,13 @@ BACK TO TOP
 }
 .back-to-top.show{opacity:1;visibility:visible;transform:translateY(0);}
 .back-to-top:hover{background:var(--blue-700);color:#fff;border-color:var(--blue-700);}
+/* Hidden state — overrides .show when footer is visible */
+.back-to-top.is-hidden-view{
+  opacity:0 !important;
+  visibility:hidden !important;
+  transform:translateY(14px) !important;
+  pointer-events:none !important;
+}
 /* ============================================================
 MODAL
    ============================================================ */
@@ -1603,7 +1617,6 @@ RESPONSIVE — MOBILE (<= 900px)
   .footer-grid{grid-template-columns:1fr;gap:34px;}
   .footer-bottom{flex-direction:column;text-align:center;}
 
-  /* Floating stack — clear of the mobile CTA */
   .float-actions{bottom:calc(96px + var(--safe-bottom));right:16px;}
   .float-actions .float-call{display:none;}
   .float-actions .float-book{display:none;}
@@ -1633,7 +1646,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .section{padding:60px 0;}
   .section-head{margin-bottom:38px;}
 
-  /* HERO */
   .hero{padding:calc(var(--nav-h) + 26px) 0 120px;min-height:auto;}
   .hero-eyebrow{
     font-size:.68rem;
@@ -1657,7 +1669,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .hero-dot{width:28px;}
   .hero-dot.is-active{width:42px;}
 
-  /* ABOUT — hide decorative accent that overflows */
   .about-media-accent{display:none;}
   .about-image-wrap{border-radius:var(--r-lg);aspect-ratio:1/1;}
   .about-badge{left:12px;right:12px;bottom:12px;padding:14px 16px;}
@@ -1669,16 +1680,13 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .stat-label{font-size:.68rem;}
   .stat-note{font-size:.75rem;margin-bottom:22px;}
 
-  /* WHY */
   .why-grid{grid-template-columns:1fr;gap:16px;}
   .why-card{padding:26px 22px 24px;}
   .why-icon{width:52px;height:52px;font-size:1.25rem;margin-bottom:16px;}
 
-  /* FILTERS */
   .filters{gap:8px;margin-bottom:24px;}
   .filter-btn{padding:9px 16px;font-size:.78rem;}
 
-  /* CAROUSEL */
   .carousel{padding:0;}
   .car-btn{display:none;}
   .tour-card{flex:0 0 82vw;max-width:82vw;}
@@ -1686,13 +1694,11 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .tour-body h3{font-size:1.05rem;}
   .car-hint{font-size:.78rem;text-align:left;justify-content:flex-start;padding-left:4px;}
 
-  /* VIDEO */
   .video-section{min-height:400px;padding:70px 0;}
   .video-headline{font-size:1.7rem;}
   .video-sub{font-size:.92rem;margin-bottom:32px;}
   .play-btn{width:76px;height:76px;font-size:1.3rem;}
 
-  /* SPLIT */
   .split-media-tag{
     bottom:12px;left:12px;
     padding:9px 16px;
@@ -1706,7 +1712,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .pill-grid{gap:8px;margin:22px 0 26px;}
   .pill{padding:9px 14px;font-size:.79rem;gap:7px;}
 
-  /* TESTIMONIALS */
   .testi-inner{padding:24px 18px;}
   .testi-inner::before{font-size:4.5rem;}
   .testi-quote{font-size:.95rem;margin-bottom:22px;}
@@ -1716,7 +1721,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .testi-meta{text-align:center;}
   .disclaimer{font-size:.75rem;padding:12px 14px;}
 
-  /* BOOKING */
   .booking-form{padding:22px 18px;border-radius:var(--r-lg);}
   .form-row{grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
   .form-actions{flex-direction:column;gap:10px;margin-top:22px;}
@@ -1725,29 +1729,24 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   .side-actions{flex-direction:column;}
   .side-actions .btn{width:100%;}
 
-  /* FEEDBACK */
   .feedback-form{padding:22px 18px;border-radius:var(--r-lg);}
 
-  /* CONTACT */
   .contact-grid{grid-template-columns:1fr;}
   .contact-card{padding:24px 20px;}
   .hours li{font-size:.85rem;}
 
-  /* FOOTER */
   .footer{padding:56px 0 calc(110px + var(--safe-bottom));}
   .footer-grid{padding-bottom:34px;}
   .footer-blurb{max-width:100%;}
   .payment-pills{gap:8px;}
   .pay-pill{padding:8px 14px;font-size:.75rem;}
 
-  /* BACK TO TOP */
   .back-to-top{
     left:16px;
     bottom:calc(96px + var(--safe-bottom));
     width:44px;height:44px;
   }
 
-  /* FLOAT ACTIONS */
   .float-actions{
     right:16px;
     bottom:calc(96px + var(--safe-bottom));
@@ -1755,7 +1754,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
   }
   .float-btn{width:50px;height:50px;font-size:1.15rem;}
 
-  /* MOBILE CTA — bigger tap target */
   .mobile-cta{
     left:12px;right:12px;
     bottom:calc(12px + var(--safe-bottom));
@@ -1763,7 +1761,6 @@ RESPONSIVE — SMALL PHONES (<= 640px)
     font-size:.94rem;
   }
 
-  /* MODAL */
   .modal-hero{aspect-ratio:4/3;}
   .modal-hero-text{padding:18px;}
   .modal-meta{font-size:.78rem;gap:8px 14px;}
@@ -1824,7 +1821,7 @@ RESPONSIVE — VERY SMALL PHONES (<= 480px)
   .float-actions{right:12px;}
 }
 /* ============================================================
-RESPONSIVE — ULTRA SMALL (<= 380px) — safety net
+RESPONSIVE — ULTRA SMALL (<= 380px)
    ============================================================ */
 @media (max-width:380px){
   .container{width:min(1240px,100% - 20px);}
@@ -3776,11 +3773,20 @@ Please assist me with availability and pricing.`;
     });
   }
 
+  /* ==========================================================
+     FLOATING VISIBILITY — hide on hero (mobile CTA only) and
+     hide on footer (ALL floating elements) so nothing covers
+     the footer content.
+     ========================================================== */
   function initMobileCtaVisibility() {
     const cta = $('#mobileCta');
+    const floats = $('.float-actions');
+    const backToTop = $('#backToTop');
     const hero = $('#home');
     const footer = $('#footer');
-    if (!cta || !hero || !footer) return;
+
+    if (!hero || !footer) return;
+    if (!cta && !floats && !backToTop) return;
 
     const isMobile = window.matchMedia('(max-width: 900px)');
 
@@ -3788,33 +3794,51 @@ Please assist me with availability and pricing.`;
     let footerVisible = false;
 
     function update() {
-      if (!isMobile.matches) {
-        cta.classList.remove('is-hidden-view');
-        return;
+      /* Mobile CTA — only shown on mobile, hidden on hero + footer */
+      if (cta) {
+        if (!isMobile.matches) {
+          cta.classList.remove('is-hidden-view');
+        } else if (heroVisible || footerVisible) {
+          cta.classList.add('is-hidden-view');
+        } else {
+          cta.classList.remove('is-hidden-view');
+        }
       }
-      if (heroVisible || footerVisible) {
-        cta.classList.add('is-hidden-view');
-      } else {
-        cta.classList.remove('is-hidden-view');
+
+      /* Floating action stack (WhatsApp / Call / Book) — hidden on footer */
+      if (floats) {
+        if (footerVisible) {
+          floats.classList.add('is-hidden-view');
+        } else {
+          floats.classList.remove('is-hidden-view');
+        }
+      }
+
+      /* Back to top arrow — hidden on footer */
+      if (backToTop) {
+        if (footerVisible) {
+          backToTop.classList.add('is-hidden-view');
+        } else {
+          backToTop.classList.remove('is-hidden-view');
+        }
       }
     }
 
     if (!('IntersectionObserver' in window)) {
-      cta.classList.remove('is-hidden-view');
+      // Fallback for very old browsers — never hide anything.
+      if (cta) cta.classList.remove('is-hidden-view');
+      if (floats) floats.classList.remove('is-hidden-view');
+      if (backToTop) backToTop.classList.remove('is-hidden-view');
       return;
     }
 
     const heroObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        heroVisible = entry.isIntersecting;
-      });
+      entries.forEach(entry => { heroVisible = entry.isIntersecting; });
       update();
     }, { threshold: 0.05, rootMargin: '0px' });
 
     const footerObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        footerVisible = entry.isIntersecting;
-      });
+      entries.forEach(entry => { footerVisible = entry.isIntersecting; });
       update();
     }, { threshold: 0.02, rootMargin: '0px' });
 
