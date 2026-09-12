@@ -109,14 +109,13 @@ p:last-child{margin-bottom:0;}
 }
 .skip-link:focus{left:0;}
 /* ============================================================
-GLOBAL WEBSITE BACKGROUND — subtle travel photo behind everything
+GLOBAL WEBSITE BACKGROUND
    ============================================================ */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   z-index:-2;
-  /* Soft white/blue overlay on top of a subtle travel photo */
   background:
     linear-gradient(180deg, rgba(255,255,255,.92) 0%, rgba(251,252,254,.90) 55%, rgba(246,248,252,.94) 100%),
     radial-gradient(circle at 12% 8%, rgba(37,99,201,.08), transparent 45%),
@@ -690,7 +689,7 @@ TOUR CAROUSEL
 }
 .is-hidden{display:none !important;}
 /* ============================================================
-VIDEO SECTION — HD video (crisp, not blurry)
+VIDEO SECTION
    ============================================================ */
 .video-section{
   position:relative;
@@ -1258,6 +1257,9 @@ FLOATING ACTIONS
   box-shadow:var(--shadow-md);
 }
 .float-btn:hover .float-tip{opacity:1;transform:translateY(-50%) translateX(-4px);}
+/* ============================================================
+MOBILE STICKY CTA — smart hide on hero & footer
+   ============================================================ */
 .mobile-cta{
   position:fixed;left:16px;right:16px;bottom:16px;z-index:810;
   display:none;align-items:center;justify-content:center;gap:10px;
@@ -1266,9 +1268,19 @@ FLOATING ACTIONS
   color:var(--blue-900);
   font-family:var(--font-head);font-weight:700;font-size:.95rem;
   box-shadow:0 14px 36px rgba(245,179,1,.42);
-  transition:transform .3s var(--ease);
+  transition:transform .35s var(--ease), opacity .35s var(--ease), visibility .35s var(--ease);
 }
 .mobile-cta:active{transform:scale(.97);}
+/* Hidden state — used when hero or footer is in view */
+.mobile-cta.is-hidden-view{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(24px);
+  pointer-events:none;
+}
+/* ============================================================
+BACK TO TOP
+   ============================================================ */
 .back-to-top{
   position:fixed;left:22px;bottom:26px;z-index:800;
   width:48px;height:48px;border-radius:50%;
@@ -1479,7 +1491,7 @@ SCROLL REVEAL
 }
 .reveal.in-view{opacity:1;transform:none;}
 /* ============================================================
-RESPONSIVE
+RESPONSIVE — TABLET
    ============================================================ */
 @media (max-width:1080px){
   .nav-links{gap:0;}
@@ -1491,15 +1503,20 @@ RESPONSIVE
   .modal-body{grid-template-columns:1fr;}
   .modal-side{order:-1;}
 }
+/* ============================================================
+RESPONSIVE — MOBILE (nav menu, small tablets)
+   ============================================================ */
 @media (max-width:900px){
-  :root{--nav-h:72px;}
+  :root{--nav-h:72px;--nav-h-small:60px;}
   .hamburger{display:flex;}
   .nav-cta{display:none;}
   .nav-cta-mobile{display:inline-flex;width:100%;justify-content:center;margin-top:8px;}
+
+  /* Mobile slide-in nav */
   .nav-links{
     position:fixed;
     top:0;right:0;
-    width:min(330px,86vw);
+    width:min(340px,88vw);
     height:100svh;
     flex-direction:column;
     align-items:stretch;
@@ -1515,27 +1532,48 @@ RESPONSIVE
   .nav-links.open{transform:translateX(0);}
   .nav-link{
     color:rgba(255,255,255,.9) !important;
-    padding:15px 18px;
+    padding:16px 18px;
     border-radius:var(--r-sm);
     font-size:1rem;
     border-bottom:1px solid rgba(255,255,255,.07);
+    min-height:52px;
+    display:flex;
+    align-items:center;
   }
-  .nav-link:hover{background:rgba(255,255,255,.07);color:#fff !important;}
+  .nav-link:hover,
+  .nav-link:active{background:rgba(255,255,255,.07);color:#fff !important;}
   .nav-link::after{display:none;}
+
+  /* Layouts */
   .split{grid-template-columns:1fr;gap:36px;}
   .split-reverse .split-media{order:0;}
   .split-reverse .split-copy{order:0;}
-  .carousel{padding:0 48px;}
-  .tour-card{flex:0 0 280px;max-width:280px;}
-  .video-section{min-height:440px;padding:80px 0;}
+
+  /* Sections */
   .section{padding:74px 0;}
   .section-head{margin-bottom:42px;}
+
+  /* Carousel */
+  .carousel{padding:0 48px;}
+  .tour-card{flex:0 0 280px;max-width:280px;}
+
+  /* Video */
+  .video-section{min-height:440px;padding:80px 0;}
+
+  /* Footer */
   .footer-grid{grid-template-columns:1fr;gap:34px;}
   .footer-bottom{flex-direction:column;text-align:center;}
-  .float-actions{bottom:84px;right:16px;}
+
+  /* Floating action stack */
+  .float-actions{bottom:88px;right:16px;}
   .float-actions .float-call{display:none;}
+
+  /* Mobile CTA visible by default (JS still hides it on hero/footer) */
   .mobile-cta{display:flex;}
-  .back-to-top{left:16px;bottom:84px;}
+
+  .back-to-top{left:16px;bottom:88px;}
+
+  /* Modal */
   .modal{padding:0;}
   .modal-panel{
     max-height:100svh;
@@ -1547,27 +1585,95 @@ RESPONSIVE
   .timeline li{grid-template-columns:52px 1fr;gap:22px;}
   .timeline li::before{left:56px;}
 }
+/* ============================================================
+RESPONSIVE — SMALL PHONES (<= 640px)
+   ============================================================ */
 @media (max-width:640px){
+  :root{--nav-h:64px;--nav-h-small:56px;}
   .container{width:min(1240px,100% - 32px);}
-  .section{padding:62px 0;}
-  .hero{padding:calc(var(--nav-h) + 30px) 0 130px;}
+
+  /* Sections */
+  .section{padding:60px 0;}
+
+  /* Hero */
+  .hero{padding:calc(var(--nav-h) + 30px) 0 120px;}
+  .hero-eyebrow{
+    font-size:.7rem;
+    padding:8px 14px;
+    letter-spacing:.06em;
+    margin-bottom:20px;
+  }
+  .hero-title{font-size:clamp(2.1rem,11vw,3rem);margin-bottom:20px;}
+  .hero-sub{font-size:1rem;margin-bottom:30px;}
+  .hero-cta{width:100%;margin-bottom:36px;gap:10px;}
+  .hero-cta .btn{flex:1 1 100%;--btn-pad:14px 22px;font-size:.94rem;}
   .hero-trust{
     flex-direction:column;align-items:flex-start;gap:12px;
-    width:100%;padding:18px 20px;
+    width:100%;padding:16px 18px;
   }
+  .hero-trust li{font-size:.86rem;}
   .hero-trust .sep{display:none;}
-  .hero-cta{width:100%;}
-  .hero-cta .btn{flex:1 1 100%;}
   .hero-scroll{display:none;}
   .hero-dots{bottom:26px;}
+
+  /* About */
   .about-points{grid-template-columns:1fr;}
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .form-row{grid-template-columns:1fr;gap:16px;}
-  .form-actions .btn{min-width:100%;}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat{padding:16px 12px;}
+  .stat-num{font-size:1.6rem;}
+
+  /* Why cards */
+  .why-grid{grid-template-columns:1fr;gap:16px;}
+  .why-card{padding:26px 22px 24px;}
+
+  /* Filters */
+  .filters{gap:8px;margin-bottom:26px;}
+  .filter-btn{padding:10px 16px;font-size:.78rem;}
+
+  /* Carousel — swipe only on small screens */
   .carousel{padding:0;}
   .car-btn{display:none;}
-  .tour-card{flex:0 0 84vw;max-width:84vw;}
-  .testi-controls{gap:12px;}
+  .tour-card{flex:0 0 82vw;max-width:82vw;}
+  .tour-body{padding:18px 18px 20px;}
+  .car-hint{font-size:.78rem;text-align:left;justify-content:flex-start;}
+
+  /* Video */
+  .video-section{min-height:400px;padding:70px 0;}
+  .play-btn{width:76px;height:76px;font-size:1.35rem;}
+
+  /* Testimonials */
+  .testi-inner{padding:26px 20px;}
+  .testi-controls{gap:14px;}
+  .testi-person{flex-direction:column;text-align:center;}
+  .testi-meta{text-align:center;}
+
+  /* Booking form */
+  .booking-form{padding:22px 18px;}
+  .form-row{grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
+  .form-actions{flex-direction:column;gap:10px;margin-top:20px;}
+  .form-actions .btn{min-width:100%;width:100%;}
+
+  /* Contact */
+  .contact-grid{grid-template-columns:1fr;}
+  .contact-card{padding:24px 20px;}
+
+  /* Footer */
+  .footer{padding:60px 0 110px;} /* extra room for the mobile CTA */
+  .footer-grid{padding-bottom:38px;}
+  .payment-pills{gap:8px;}
+  .pay-pill{padding:8px 14px;font-size:.76rem;}
+
+  /* Back to top */
+  .back-to-top{bottom:88px;}
+
+  /* Mobile CTA — bigger tap target */
+  .mobile-cta{
+    left:12px;right:12px;bottom:12px;
+    padding:16px 22px;
+    font-size:.94rem;
+  }
+
+  /* Modal */
   .modal-hero{aspect-ratio:4/3;}
   .modal-hero-text{padding:20px;}
   .modal-meta{font-size:.79rem;gap:8px 14px;}
@@ -1576,9 +1682,44 @@ RESPONSIVE
   .timeline li::before{display:none;}
   .tl-time{text-align:left;font-size:.78rem;}
   .tl-label{padding-left:0;}
-  .contact-grid{grid-template-columns:1fr;}
-  .footer{padding:60px 0 26px;}
-  .back-to-top{bottom:84px;}
+}
+/* ============================================================
+RESPONSIVE — VERY SMALL PHONES (<= 480px)
+   ============================================================ */
+@media (max-width:480px){
+  .container{width:min(1240px,100% - 24px);}
+  .section{padding:52px 0;}
+  .section-head{margin-bottom:32px;}
+  .section-head h2{font-size:1.6rem;}
+  .section-sub{font-size:.94rem;}
+
+  .hero{padding:calc(var(--nav-h) + 24px) 0 110px;}
+  .hero-title{font-size:2rem;}
+  .hero-sub{font-size:.94rem;}
+  .hero-eyebrow{font-size:.65rem;padding:7px 12px;}
+
+  .stats{grid-template-columns:1fr;}
+
+  .tour-card{flex:0 0 88vw;max-width:88vw;}
+  .tour-body h3{font-size:1rem;}
+
+  .video-headline{font-size:1.6rem;}
+  .video-sub{font-size:.9rem;}
+  .play-btn{width:68px;height:68px;font-size:1.2rem;}
+
+  .btn-lg{--btn-pad:14px 22px;font-size:.92rem;}
+
+  .sidebar__brand{padding:18px 16px;}
+  .brand-text{font-size:1rem;}
+  .brand-mark{width:40px;height:40px;}
+
+  .footer{padding:48px 0 110px;}
+
+  .mobile-cta{
+    padding:14px 18px;
+    font-size:.9rem;
+    left:10px;right:10px;bottom:10px;
+  }
 }
 /* ============================================================
 REDUCED MOTION
@@ -1818,7 +1959,6 @@ REDUCED MOTION
     </div>
   </section>
 
-  <!-- VIDEO SECTION — HD video now playing -->
   <section class="video-section" aria-label="Golden Tours in action">
     <div class="video-bg" id="videoBg" aria-hidden="true">
       <video id="experienceVideo" muted loop playsinline preload="auto"></video>
@@ -2448,8 +2588,7 @@ REDUCED MOTION
   };
 
   /* ==========================================================
-     VIDEO — HD 720p travel video (clear, not blurry)
-     ▸ Swap to your own file later, e.g. 'assets/videos/golden-tours.mp4'
+     VIDEO — HD 720p travel video
      ========================================================== */
   const GOLDEN_TOURS_MEDIA = {
     heroVideo: '',
@@ -3444,7 +3583,7 @@ Please assist me with availability and pricing.`;
   }
 
   /* ==========================================================
-     VIDEO SECTION — HD video playback
+     VIDEO SECTION
      ========================================================== */
   function initExperienceVideo() {
     const btn = $('#playExperience');
@@ -3530,6 +3669,74 @@ Please assist me with availability and pricing.`;
         video.pause();
       }
     });
+  }
+
+  /* ==========================================================
+     MOBILE CTA — smart hide on hero & footer
+     ==========================================================
+     Behaviour:
+       ▸ Hidden while the hero section is visible.
+       ▸ Visible in the middle of the page.
+       ▸ Hidden again while the footer is visible.
+     ========================================================== */
+  function initMobileCtaVisibility() {
+    const cta = $('#mobileCta');
+    const hero = $('#home');
+    const footer = $('#footer');
+    if (!cta || !hero || !footer) return;
+
+    // Only run on screens where the CTA is displayed.
+    const isMobile = window.matchMedia('(max-width: 900px)');
+
+    let heroVisible = true;
+    let footerVisible = false;
+
+    function update() {
+      if (!isMobile.matches) {
+        // Not mobile → let CSS handle display entirely.
+        cta.classList.remove('is-hidden-view');
+        return;
+      }
+      if (heroVisible || footerVisible) {
+        cta.classList.add('is-hidden-view');
+      } else {
+        cta.classList.remove('is-hidden-view');
+      }
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      // Fallback for very old browsers — always show CTA.
+      cta.classList.remove('is-hidden-view');
+      return;
+    }
+
+    const heroObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        // Consider the hero "in view" if even a small part is visible.
+        heroVisible = entry.isIntersecting;
+      });
+      update();
+    }, { threshold: 0.05, rootMargin: '0px' });
+
+    const footerObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        footerVisible = entry.isIntersecting;
+      });
+      update();
+    }, { threshold: 0.02, rootMargin: '0px' });
+
+    heroObs.observe(hero);
+    footerObs.observe(footer);
+
+    // Respond to viewport size changes.
+    if (isMobile.addEventListener) {
+      isMobile.addEventListener('change', update);
+    } else if (isMobile.addListener) {
+      isMobile.addListener(update);
+    }
+
+    // Initial state.
+    update();
   }
 
   /* ==========================================================
@@ -4009,6 +4216,7 @@ Please assist me with availability and pricing.`;
     initTourFilters();
     initTourModal();
     initExperienceVideo();
+    initMobileCtaVisibility();
     initTestimonials();
     initBookingForm();
     initFeedbackForm();
